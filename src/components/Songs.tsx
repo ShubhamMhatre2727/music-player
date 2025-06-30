@@ -1,50 +1,54 @@
-import {collection, getDocs} from 'firebase/firestore';
-import { db } from '../firebase';
-import { useEffect, useState } from 'react';
+// this component fetches songs from the firestore database and displays them in a table
+// it also shows the song title, artist name, and a delete button (which is not functional yet)
 
-interface Song {
-    title: string;
-    artists: [string];
-    album: string;
-    path: string;
-    imagePath: string;
-}
+import type { Song } from "@/types"
 
+// the delete button is hidden by default and appears when the user hovers over the row 
+function Songs({songs, currentSong, setCurrentSong}: {songs: Song[], currentSong:number, setCurrentSong: (song: number) => void}) {
 
-function Songs() {
-    const [songs, setSongs] = useState<Song[]>([]);
-
-    useEffect(()=>{
-        async function getSongs(){
-        const songsSnapshot = await getDocs(collection(db, 'songs'));
-        const songsList: Song[] = songsSnapshot.docs.map((doc) => doc.data() as Song);
-        setSongs(songsList);
-    }
-        getSongs();
-    },[])
 
   return (
-    <div className='px-6'>
-        <h2>Songs</h2>
-        <div>
-            {
-                songs.map((song, index)=>{
-                    return (
-                        <div key={index} className='border-b border-gray-500 pt-3 flex items-center'>
-                            <img src={song.imagePath} alt="" className='w-12'/>
-                            <div className='border'>
-                                <h3 className='text-lg font-semibold'>
-                                {song.title}
-                            </h3>
-                            <p className='opacity-50 text-sm font-semibold pb-1'>
-                                {song.artists.join(", ")}
-                            </p>
-                            </div>
-                        </div>
-                    )
-                })
-            }
-        </div>
+    <div className='px-6 sm:min-w-1/2 md:min-w-2/3 h-full'>
+        <img src="src/assets/Music Player.png" alt="" className='pt-6 h-[10%]' />
+        <h2 >Songs</h2>
+        <div className="max-h-[85%] overflow-y-auto ">
+  <table className="w-full">
+    <thead className="text-lg ">
+      <tr className='text-[#ffffff60] '>
+        <td className="sticky top-0 bg-black text-start  z-10 ">#</td>
+        <td className="sticky top-0 bg-gradient-to-r from-black text-start  z-10 ">Title</td>
+        <td className="sticky top-0 bg-black sm:bg-transparent text-start  z-10 "></td>
+      </tr>
+    </thead>
+    <tbody>
+
+
+      {/* This part shows the list of songs */}
+      {
+        songs.map((song, index) => (
+          <tr key={index} >
+        <td className=" text-[#fff5] font-semibold text-lg ">{index + 1}</td>
+        <td className=" flex items-center space-x-2 p-2" onClick={() => setCurrentSong(index)}>
+          <img src={song.imagePath} alt="" className={ `w-12 h-12 rounded-lg ${index==currentSong && 'slow-spin'}`} />
+          <div className="font-semibold">
+            <h3 className="text-lg">{song.title}</h3>
+            <p className="text-sm text-[#fff5]">{song.artists.join(", ")}</p>
+          </div>
+        </td>
+        <td className="group relative  text-center">
+          <p className='text-[#fff5]'>ooo</p>
+          <button className="bg-red-800 px-2 rounded-lg hidden group-hover:block absolute top-1/2 right-1/2">delete</button>
+        </td>
+      </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+
+
+
     </div>
   )
 }
