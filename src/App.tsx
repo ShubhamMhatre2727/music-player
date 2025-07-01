@@ -4,10 +4,12 @@ import Songs from "./components/Songs"
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import type { Song } from "./types";
+import { useRecoilState } from "recoil";
+import { songsState } from "./state/songsAtom";
 
 function App() {
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [currentSong, setCurrentSong] = useState<number>(0);
+  
+  const [songs, setSongs] = useRecoilState(songsState);
 
   useEffect(()=>{
     async function fetchCurrentSong() {
@@ -21,8 +23,8 @@ function App() {
 
   return (
     <div className="bg-black h-screen text-white sm:flex flex-row-reverse">
-      <Player songs={songs} currentSong={currentSong} setCurrentSong={setCurrentSong} />
-      <Songs songs={songs} currentSong={currentSong} setCurrentSong={setCurrentSong} />
+      <Player/>
+      <Songs/>
     </div>
     
   )

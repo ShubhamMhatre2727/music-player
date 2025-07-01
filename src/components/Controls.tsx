@@ -1,41 +1,50 @@
 import { Slider } from "@/components/ui/slider";
-import { useEffect, useState } from "react";
+import { currentSongState } from "@/state/songsAtom";
+import { useEffect, useState, type RefObject } from "react";
+import { useRecoilState } from "recoil";
 
 // This component is used to control the music player
 // It shows the song title, artist name, current time, duration, and controls for playing, pausing, and seeking the song
 // It also includes a slider to seek specific parts of the song
-function Controls({currentAudio, setCurrentSong}: {currentAudio: HTMLAudioElement, setCurrentSong: (song: number) => void}) {
+function Controls({audioRef}:{audioRef:RefObject<HTMLAudioElement> | any}) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
 
+    const [currentSong, setCurrentSong] = useRecoilState(currentSongState);
 
     useEffect(() => {
 
     function updateProgress() {
-      setProgress((currentAudio.currentTime / currentAudio.duration) * 100);
+      setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
     }
 
     function handleEnded() {
         setProgress(0);        
         // Automatically play the next song when the current one ends
-        setCurrentSong(prevSong => (prevSong + 1)%18);
+        setCurrentSong((prev) => (prev+1)%18);
     }
 
-    currentAudio.addEventListener("timeupdate", updateProgress);
-    currentAudio.addEventListener("ended", handleEnded);
+    audioRef.current.addEventListener("timeupdate", updateProgress);
+    audioRef.current.addEventListener("ended", handleEnded);
     
     return () => {
-        currentAudio.removeEventListener("timeupdate", updateProgress);
-        currentAudio.removeEventListener("ended", handleEnded);
+        audioRef.current.removeEventListener("timeupdate", updateProgress);
+        audioRef.current.removeEventListener("ended", handleEnded);
     };
   }, []);
 
+  useEffect(()=>{
+    if (audioRef.current) {
+      audioRef.current.play();
+    }
+  },[currentSong])
+
     function handlePlayPause() {
-    if (currentAudio) {
+    if (audioRef.current) {
       if (isPlaying) {
-        currentAudio.pause();
+        audioRef.current.pause();
       } else {
-        currentAudio.play();
+        audioRef.current.play();
       }
       setIsPlaying(!isPlaying);
     }
@@ -44,18 +53,19 @@ function Controls({currentAudio, setCurrentSong}: {currentAudio: HTMLAudioElemen
 
 
     function handleSeek(e: number[]){
-    if (currentAudio) {
+    if (audioRef.current) {
       const newProgress = e[0];
       setProgress(newProgress);
-      const newTime = (newProgress / 100) * currentAudio.duration;
-      currentAudio.currentTime = newTime;
+      const newTime = (newProgress / 100) * audioRef.current.duration;
+      audioRef.current.currentTime = newTime;
     }
   }
 
   function handlePlayPack(i : number){
-    setProgress(0);        
-        // Automatically play the next song when the current one ends
-        setCurrentSong(prevSong => Math.max(0,(prevSong + i)%18));
+    // setProgress(0);
+    // Get current song index from currentAudio's dataset or default to 0
+    setCurrentSong((prev)=> Math.max(0, (prev+i)%18));
+    setIsPlaying(true)
   }
 
 
@@ -77,10 +87,13 @@ function Controls({currentAudio, setCurrentSong}: {currentAudio: HTMLAudioElemen
 
 
           {/* this part shows current time and duration of a song */}
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[#ffffff60]">{((currentAudio?.currentTime)/60)?.toFixed(2)}</span>
-            <span className="text-sm text-[#ffffff60]">{((currentAudio?.duration)/60).toFixed(2)}</span>
+          {
+            (audioRef.current) &&
+            <div className="flex items-center justify-between">
+            <span className="text-sm text-[#ffffff60]">{((audioRef.current?.currentTime)/60)?.toFixed(2)}</span>
+            <span className="text-sm text-[#ffffff60]">{((audioRef.current?.duration)/60).toFixed(2)}</span>
           </div>
+          }
         </div>
 
       {/* this part shows the controls for the music player */}

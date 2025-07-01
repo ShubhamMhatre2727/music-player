@@ -1,11 +1,13 @@
 // this component fetches songs from the firestore database and displays them in a table
 // it also shows the song title, artist name, and a delete button (which is not functional yet)
 
-import type { Song } from "@/types"
+import { currentSongState, songsState } from "@/state/songsAtom"
+import { useRecoilState, useRecoilValue } from "recoil"
 
 // the delete button is hidden by default and appears when the user hovers over the row 
-function Songs({songs, currentSong, setCurrentSong}: {songs: Song[], currentSong:number, setCurrentSong: (song: number) => void}) {
-
+function Songs() {
+  const songs = useRecoilValue(songsState);
+  const [currentSong, setCurrentSong] = useRecoilState(currentSongState);
 
   return (
     <div className='px-6 sm:min-w-1/2 md:min-w-2/3 h-full'>

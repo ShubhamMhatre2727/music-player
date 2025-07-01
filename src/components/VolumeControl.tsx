@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type RefObject } from "react";
 
-function VolumeControl({ currentAudio }: { currentAudio: HTMLAudioElement }) {
+function VolumeControl({ audioRef }: { audioRef: RefObject<HTMLAudioElement> | any }) {
     const [volume, setVolume] = useState(50);
 
     useEffect(() => {
-        currentAudio.volume = volume / 100;
-    }, [volume, currentAudio]);
+        audioRef.current.volume = volume / 100;
+    }, [volume, audioRef.current]);
 
     return (
         <div className="flex items-center justify-center gap-2">
