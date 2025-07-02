@@ -38,6 +38,7 @@ function Controls({audioRef}:{audioRef:RefObject<HTMLAudioElement> | any}) {
   useEffect(()=>{
     if (audioRef.current) {
       audioRef.current.play();
+      window.scrollTo({top:-500, behavior:'smooth'})
     }
   },[currentSong])
 

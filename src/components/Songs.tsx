@@ -7,6 +7,7 @@ import { useRecoilState, useRecoilValue } from "recoil"
 // the delete button is hidden by default and appears when the user hovers over the row 
 function Songs() {
   const songs = useRecoilValue(songsState);
+  console.log(songs);
   const [currentSong, setCurrentSong] = useRecoilState(currentSongState);
 
   return (
@@ -14,11 +15,12 @@ function Songs() {
         <img src="src/assets/Music Player.png" alt="" className='pt-6 h-[10%]' />
         <div className="max-h-[85%] overflow-y-auto ">
   <table className="w-full">
-    <thead className="text-lg ">
+    <thead className="text-lg opacity-0 sm:opacity-100">
       <tr className='text-[#ffffff60] '>
         <td className="sticky top-0 bg-black text-start  z-10 ">#</td>
         <td className="sticky top-0 bg-gradient-to-r from-black text-start  z-10 ">Title</td>
-        <td className="sticky top-0 bg-black sm:bg-transparent text-start  z-10 "></td>
+        <td className="sticky top-0 bg-gradient-to-r from-black text-start  z-10 hidden md:table-cell">Album</td>
+        <td className="sticky top-0 bg-transparent text-start  z-10 "></td>
       </tr>
     </thead>
     <tbody>
@@ -36,10 +38,10 @@ function Songs() {
             <p className="text-sm text-[#fff5]">{song.artists.join(", ")}</p>
           </div>
         </td>
-        <td className="group relative  text-center">
-          <p className='text-[#fff5]'>ooo</p>
-          <button className="bg-red-800 px-2 rounded-lg hidden group-hover:block absolute top-1/2 right-1/2">delete</button>
+        <td className="text-[#fff5] hidden md:table-cell" onClick={() => setCurrentSong(index)}>
+          {song.album}
         </td>
+        <td className="text-[#fff5]" onClick={() => setCurrentSong(index)}>{(song.duration).toFixed(2)} </td>
       </tr>
         ))
       }
