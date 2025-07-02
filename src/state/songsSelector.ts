@@ -8,3 +8,10 @@ export const currentlyPlaying = selector<Song>({
         return get(songsState)[get(currentSongState)]
     }
 })
+
+export const songsCountState = selector<number>({
+    key:'songsCountState',
+    get: ({get})=>{
+        return get(songsState).length;
+    }
+})

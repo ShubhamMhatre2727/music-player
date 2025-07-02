@@ -12,7 +12,6 @@ function Songs() {
   return (
     <div className='px-6 sm:min-w-1/2 md:min-w-2/3 h-full'>
         <img src="src/assets/Music Player.png" alt="" className='pt-6 h-[10%]' />
-        <h2 >Songs</h2>
         <div className="max-h-[85%] overflow-y-auto ">
   <table className="w-full">
     <thead className="text-lg ">

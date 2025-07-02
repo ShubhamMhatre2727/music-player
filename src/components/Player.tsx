@@ -1,10 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Controls from "./Controls";
 import VolumeControl from "./VolumeControl";
 import { useRecoilValue } from "recoil";
 import { currentlyPlaying } from "@/state/songsSelector";
-import type { Song } from "@/types";
-import { songsState } from "@/state/songsAtom";
 
 
 function Player() {
@@ -46,6 +44,11 @@ function Player() {
         </div>
 
          <Controls audioRef={audioRef}/>
+      </div>
+
+      <div className="text-center text-[#fff6] sm:hidden" onClick={()=>window.scrollTo({ top: 300, behavior: 'smooth' })}>
+        <span>songs</span>
+        <p className="scale-y-[300%] rotate-90 translate-x-1 -translate-y-1.5">&gt;</p>
       </div>
     </div>
   );

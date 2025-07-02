@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Player from "./components/Player"
 import Songs from "./components/Songs"
 import { collection, getDocs } from "firebase/firestore";
@@ -15,6 +15,7 @@ function App() {
     async function fetchCurrentSong() {
       const songsSnapshot = await getDocs(collection(db, 'songs'));
       const songsList: Song[] = songsSnapshot.docs.map((doc) => doc.data() as Song);
+      console.log(songs);
         setSongs([...songsList]);
     }
 
