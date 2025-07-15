@@ -1,15 +1,21 @@
-import { useRef } from "react";
 import Controls from "./Controls";
 import VolumeControl from "./VolumeControl";
 import { useRecoilValue } from "recoil";
 import { currentlyPlaying } from "@/state/songsSelector";
+import { useEffect } from "react";
+
+const audio = new Audio();
 
 function Player() {
-  const audioRef = useRef<HTMLAudioElement>(null);
-
   const song = useRecoilValue(currentlyPlaying);
-
   if (!song) return null;
+
+  
+  useEffect(()=>{
+    document.title = song.title;
+    audio.src = song.path
+    audio.load();
+  },[song])
 
   return (
     <div className="h-full py-10 px-6 relative z-0">
@@ -36,10 +42,9 @@ function Player() {
           className="w-2/3 aspect-square drop-shadow-2xl"
         />
 
-        <VolumeControl audioRef={audioRef} />
+        <VolumeControl audio={audio} />
       </div>
 
-      <audio ref={audioRef} src={song.path} preload="auto" />
 
       <div className="h-50">
         <div className="text-shadow-lg shadow-black">
@@ -50,7 +55,7 @@ function Player() {
           </p>
         </div>
 
-        <Controls audioRef={audioRef} />
+        <Controls audio={audio} />
       </div>
     </div>
   );

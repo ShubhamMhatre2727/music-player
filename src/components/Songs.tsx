@@ -7,12 +7,12 @@ import { useRecoilState, useRecoilValue } from "recoil"
 // the delete button is hidden by default and appears when the user hovers over the row 
 function Songs() {
   const songs = useRecoilValue(songsState);
-  console.log(songs);
+  // console.log(songs);
   const [currentSong, setCurrentSong] = useRecoilState(currentSongState);
 
   return (
     <div className='px-6 sm:min-w-1/2 md:min-w-2/3 h-full'>
-        <img src="src/assets/Music Player.png" alt="" className='pt-6 h-[10%]' />
+        <img src="images/Music Player.png" alt="" className='pt-6 h-[10%]' />
         <div className="max-h-[85%] overflow-y-auto ">
   <table className="w-full">
     <thead className="text-lg opacity-0 sm:opacity-100">
