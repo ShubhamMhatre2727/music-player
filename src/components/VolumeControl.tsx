@@ -1,12 +1,11 @@
+import { audioPlayer } from "@/state/songsSelector";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
-function VolumeControl({
-  audio,
-}: {
-  audio: HTMLAudioElement | any;
-}) {
+function VolumeControl() {
   const [volume, setVolume] = useState(50);
-
+  const audio = useRecoilValue(audioPlayer);
+  
   useEffect(() => {
     audio.volume = volume / 100;
   }, [volume, audio]);

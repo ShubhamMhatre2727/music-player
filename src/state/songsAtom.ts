@@ -14,6 +14,7 @@ export const songsState = atom<Song[]>({
     default: fetchCurrentSong(),
 });
 
+
 export const currentSongState = atom<number>({
     key: 'currentSongState',
     default: 0

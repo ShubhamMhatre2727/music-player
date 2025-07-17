@@ -1,18 +1,19 @@
 import { Slider } from "@/components/ui/slider";
 import { currentSongState } from "@/state/songsAtom";
-import { songsCountState } from "@/state/songsSelector";
+import { songsCountState, audioPlayer } from "@/state/songsSelector";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 // This component is used to control the music player
 // It shows the song title, artist name, current time, duration, and controls for playing, pausing, and seeking the song
 // It also includes a slider to seek specific parts of the song
-function Controls({audio}:{audio:HTMLAudioElement}) {
+function Controls() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
 
     const [currentSong, setCurrentSong] = useRecoilState(currentSongState);
     console.log(currentSong);
+    const audio = useRecoilValue(audioPlayer);
     const songsCount = useRecoilValue(songsCountState)
 
     useEffect(() => {
@@ -38,13 +39,15 @@ function Controls({audio}:{audio:HTMLAudioElement}) {
   }, []);
 
     function handlePlayPause() {
-    if (audio.paused) {
-      audio.play();
-      setIsPlaying(true);
-    }else{
-      audio.pause();
-      setIsPlaying(false)
-    }
+        console.log(audio);
+        if (audio.paused) {
+          audio.load();
+        audio.play();
+        setIsPlaying(true);
+      }else{
+        audio.pause();
+        setIsPlaying(false)
+      }
   }
 
 

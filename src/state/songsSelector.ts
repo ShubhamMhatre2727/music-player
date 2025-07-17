@@ -15,3 +15,18 @@ export const songsCountState = selector<number>({
         return get(songsState).length;
     }
 })
+
+const audio = new Audio();
+
+export const audioPlayer = selector<HTMLAudioElement>({
+    key: 'audioPlayer',
+    get: ({get})=>{
+        const songPath = get(currentlyPlaying).path;
+
+        // slicing the path because public/ is included in db but it geneerates error in produnction
+        console.log(songPath);
+        audio.src = songPath;
+
+        return audio
+}
+})
