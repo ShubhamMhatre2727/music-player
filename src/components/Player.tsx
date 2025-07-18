@@ -16,6 +16,7 @@ function Player() {
   useEffect(()=>{
     document.title = song.title;
     audio.src = song.path.toLowerCase()
+    audio.play()
   },[song])
 
   return (

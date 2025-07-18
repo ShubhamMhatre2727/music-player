@@ -25,7 +25,6 @@ function Controls({audio}:{audio:HTMLAudioElement}) {
         setProgress(0);        
         // Automatically play the next song when the current one ends
         setCurrentSong((prev) => (prev+1)%songsCount);
-        setIsPlaying(false)
     }
 
     audio.addEventListener("timeupdate", updateProgress);
@@ -61,10 +60,9 @@ function Controls({audio}:{audio:HTMLAudioElement}) {
   }
 
   function handlePlayPack(i : number){
-    // setProgress(0);
     // Get current song index from currentAudio's dataset or default to 0
     setCurrentSong(Math.max(0,(currentSong+i)%songsCount));
-    setIsPlaying(false)
+    setIsPlaying(true)
   }
 
 
