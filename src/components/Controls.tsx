@@ -1,23 +1,22 @@
 import { Slider } from "@/components/ui/slider";
 import { currentSongState } from "@/state/songsAtom";
-import { songsCountState, audioPlayer } from "@/state/songsSelector";
+import { songsCountState } from "@/state/songsSelector";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 // This component is used to control the music player
 // It shows the song title, artist name, current time, duration, and controls for playing, pausing, and seeking the song
 // It also includes a slider to seek specific parts of the song
-function Controls() {
+function Controls({audio}:{audio:HTMLAudioElement}) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
 
     const [currentSong, setCurrentSong] = useRecoilState(currentSongState);
-    console.log(currentSong);
-    const audio = useRecoilValue(audioPlayer);
+    
+    // const audio = useRecoilValue(audioPlayer);
     const songsCount = useRecoilValue(songsCountState)
 
     useEffect(() => {
-
     function updateProgress() {
       setProgress((audio.currentTime / audio.duration) * 100);
     }
@@ -39,9 +38,9 @@ function Controls() {
   }, []);
 
     function handlePlayPause() {
-        console.log(audio);
+      console.log(audio.src);
+      console.log(currentSong);
         if (audio.paused) {
-          audio.load();
         audio.play();
         setIsPlaying(true);
       }else{
@@ -64,7 +63,7 @@ function Controls() {
   function handlePlayPack(i : number){
     // setProgress(0);
     // Get current song index from currentAudio's dataset or default to 0
-    setCurrentSong((prev)=> Math.max(0, (prev+i)%songsCount));
+    setCurrentSong(Math.max(0,(currentSong+i)%songsCount));
     setIsPlaying(false)
   }
 

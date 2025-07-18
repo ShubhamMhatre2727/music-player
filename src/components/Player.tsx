@@ -4,14 +4,18 @@ import { useRecoilValue } from "recoil";
 import { currentlyPlaying } from "@/state/songsSelector";
 import { useEffect } from "react";
 
+const audio = new Audio();
+
 function Player() {
   const song = useRecoilValue(currentlyPlaying);
 
   if (!song) return null;
 
   
+  
   useEffect(()=>{
     document.title = song.title;
+    audio.src = song.path.toLowerCase()
   },[song])
 
   return (
@@ -39,7 +43,7 @@ function Player() {
           className="w-2/3 aspect-square drop-shadow-2xl"
         />
 
-        <VolumeControl />
+        <VolumeControl audio={audio}/>
       </div>
 
 
@@ -52,7 +56,7 @@ function Player() {
           </p>
         </div>
 
-        <Controls/>
+        <Controls audio={audio}/>
       </div>
     </div>
   );
